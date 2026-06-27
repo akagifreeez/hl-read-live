@@ -2,6 +2,8 @@
 
 **Watch a key-free, read-only Hyperliquid MCP read the live exchange — no API key, no login.**
 
+### ▶ Live: **[hl-read-live.vercel.app](https://hl-read-live.vercel.app)**
+
 A browser showroom for [`hl-read`](https://github.com/akagifreeez/hl-read), a published read-only Hyperliquid MCP server. Click a preset and watch its tools (`meta_and_asset_ctxs()`, `l2_book()`, …) pull **real** exchange data — extreme funding rates, open-interest leaders, the BTC order book — straight from Hyperliquid's **public Info API**. No key is ever handed over.
 
 ---
