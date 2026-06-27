@@ -1,0 +1,54 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0c10; --panel: #11151d; --panel2: #0c0f15; --ink: #e8edf3; --muted: #8893a3;
+  --line: #1c2330; --pos: #4fd28a; --neg: #ff7b7b; --accent: #6fb1ff;
+}
+html, body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; -webkit-font-smoothing: antialiased; }
+.tool, .data, .px, .sz, code { font-family: "Cascadia Code", Consolas, "SF Mono", monospace; }
+main { max-width: 980px; margin: 0 auto; padding: 44px 20px 80px; }
+.hero h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(90deg, #7fd1ff, #62e6c0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .tagline { margin-top: 10px; color: var(--muted); font-size: clamp(15px, 2.2vw, 18px); max-width: 740px; line-height: 1.6; }
+
+.hl { margin-top: 24px; }
+.keybadge { display: inline-block; font-size: 13px; color: #9af0c8; background: rgba(40,110,78,.14); border: 1px solid rgba(60,150,105,.3); border-radius: 999px; padding: 6px 14px; margin-bottom: 14px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: #13233f; color: #cfe2ff; border: 1px solid #234468; border-radius: 999px; padding: 8px 16px; font-size: 14px; cursor: pointer; transition: background .15s; }
+.chip:hover:not(:disabled) { background: #1a3050; }
+.chip:disabled { opacity: .5; cursor: default; }
+
+.panel { margin-top: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden; }
+.toolrail { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.tool { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 5px 11px; }
+.tool .tdot { width: 8px; height: 8px; border-radius: 50%; background: #2a3344; }
+.tool.running { color: #ffd9a0; border-color: #6a531f; }
+.tool.running .tdot { background: #ffbf66; box-shadow: 0 0 9px #ffbf66; animation: pulse 1s infinite; }
+.tool.done { color: var(--ink); border-color: #1f3a2c; }
+.tool.done .tdot { background: var(--pos); box-shadow: 0 0 7px rgba(79,210,138,.6); }
+.ts { margin-left: auto; font-size: 12px; color: var(--muted); }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .35 } }
+.error { padding: 14px 16px; color: var(--neg); font-size: 13.5px; }
+
+.data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data th { text-align: right; color: var(--muted); font-weight: 600; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.data th:first-child, .data td:first-child { text-align: left; }
+.data td { text-align: right; padding: 9px 14px; border-bottom: 1px solid #161c27; }
+.data tr:last-child td { border-bottom: none; }
+.data .sym { font-weight: 700; color: #dfe8f3; }
+.pos { color: var(--pos); } .neg { color: var(--neg); }
+
+.book { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.side { padding: 10px 14px; }
+.side:first-child { border-right: 1px solid var(--line); }
+.sidehead { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.lvl { position: relative; display: flex; justify-content: space-between; font-size: 12.5px; padding: 3px 6px; border-radius: 5px; overflow: hidden; }
+.bar { position: absolute; top: 0; bottom: 0; left: 0; opacity: .14; border-radius: 5px; }
+.posbar { background: var(--pos); } .negbar { background: var(--neg); }
+.px { position: relative; } .sz { position: relative; color: var(--muted); }
+
+.legend { margin-top: 16px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.about { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.card { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--panel); }
+.card h3 { font-size: 14px; color: #62e6c0; margin-bottom: 6px; }
+.card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.foot { margin-top: 28px; font-size: 13px; color: var(--muted); }
+.foot a { color: #7fd1ff; text-decoration: none; } .foot a:hover { text-decoration: underline; }
