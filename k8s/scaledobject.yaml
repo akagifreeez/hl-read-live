@@ -1,0 +1,27 @@
+# KEDA HTTP Add-on: request-driven scale-to-zero + autoscale.
+# Traffic must reach the cluster THROUGH the interceptor proxy
+# (keda-add-ons-http-interceptor-proxy.keda:8080), which is where the
+# Cloudflare Tunnel public hostname for `hosts` below is pointed.
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: hl-read
+  namespace: hl-read
+spec:
+  hosts:
+    - hl.akagifreeez.net          # must equal the Host cloudflared forwards
+  scaleTargetRef:
+    name: hl-read
+    kind: Deployment
+    apiVersion: apps/v1
+    service: hl-read
+    port: 80
+  replicas:
+    min: 0                        # scale to zero when idle
+    max: 3
+  scaledownPeriod: 120            # seconds idle before returning to 0
+  scalingMetric:
+    requestRate:                  # scale on requests/sec (right metric for a fast app)
+      targetValue: 50
+      window: 1m
+      granularity: 1s

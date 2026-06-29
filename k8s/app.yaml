@@ -1,0 +1,58 @@
+# hl-read-live on k3s: namespace + Deployment + ClusterIP Service.
+# No `replicas` here on purpose — KEDA (see scaledobject.yaml) owns the count
+# so the app can scale to zero when idle.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hl-read
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hl-read
+  namespace: hl-read
+  labels: { app: hl-read }
+spec:
+  selector:
+    matchLabels: { app: hl-read }
+  template:
+    metadata:
+      labels: { app: hl-read }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001            # numeric UID so k8s can verify non-root (matches Dockerfile)
+        runAsGroup: 1001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: web
+          image: hl-read-live:0.1.0
+          imagePullPolicy: IfNotPresent   # image is imported into k3s containerd, not pulled
+          ports:
+            - { name: http, containerPort: 3000 }
+          readinessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests: { cpu: 50m, memory: 96Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hl-read
+  namespace: hl-read
+  labels: { app: hl-read }
+spec:
+  type: ClusterIP
+  selector: { app: hl-read }
+  ports:
+    - { name: http, port: 80, targetPort: http }   # cloudflared/KEDA target hl-read.hl-read.svc:80
