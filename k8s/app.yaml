@@ -30,13 +30,21 @@ spec:
           imagePullPolicy: IfNotPresent   # image is imported into k3s containerd, not pulled
           ports:
             - { name: http, containerPort: 3000 }
+          # startupProbe gates readiness/liveness until the app is first up,
+          # so readiness can be probed aggressively (every 1s, no initial delay)
+          # without flapping liveness on a slow start. Shorter cold start.
+          startupProbe:
+            httpGet: { path: /, port: http }
+            periodSeconds: 1
+            failureThreshold: 30        # up to ~30s for first start (well under CF ~100s)
           readinessProbe:
             httpGet: { path: /, port: http }
-            initialDelaySeconds: 3
-            periodSeconds: 5
+            initialDelaySeconds: 0       # detect Ready ASAP -> the interceptor forwards sooner
+            periodSeconds: 1
+            timeoutSeconds: 1
+            failureThreshold: 1
           livenessProbe:
             httpGet: { path: /, port: http }
-            initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             requests: { cpu: 50m, memory: 96Mi }
