@@ -26,8 +26,8 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
         - name: web
-          image: hl-read-live:0.1.0
-          imagePullPolicy: IfNotPresent   # image is imported into k3s containerd, not pulled
+          image: ghcr.io/akagifreeez/hl-read-live:0.1.0   # public image -> any node pulls it; survives image GC
+          imagePullPolicy: IfNotPresent   # immutable tag; cached after first pull, re-pulled from ghcr if GC'd
           ports:
             - { name: http, containerPort: 3000 }
           # startupProbe gates readiness/liveness until the app is first up,
